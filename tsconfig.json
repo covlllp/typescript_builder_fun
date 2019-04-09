@@ -6,7 +6,8 @@
     "module": "es6",
     "target": "es5",
     "jsx": "react",
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "moduleResolution": "node"
   },
   "include": ["./src/**/*"]
 }
