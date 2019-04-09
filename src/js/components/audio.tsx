@@ -18,9 +18,15 @@ export class Audio extends React.Component<AudioProps, {}> {
   }
 
   componentDidMount() {
-    const { analyser, audioContext } = this;
     const audio = this.audioElement.current;
     audio.play();
+    this.connectAnalyser();
+    this.readAudioData();
+  }
+
+  private connectAnalyser() {
+    const { analyser, audioContext } = this;
+    const audio = this.audioElement.current;
     const audioSrc = audioContext.createMediaElementSource(audio);
     audioSrc.connect(analyser);
     audioSrc.connect(audioContext.destination);

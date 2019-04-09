@@ -1,5 +1,6 @@
 const path = require('path');
-const combineLoaders = require('webpack-combine-loaders');
+// const webpack = require('webpack');
+const { TypedCssModulesPlugin } = require('typed-css-modules-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -11,7 +12,7 @@ module.exports = {
     publicPath: '/static',
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.js', '.ts', '.tsx', '.css'],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
   },
   module: {
@@ -23,19 +24,23 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: combineLoaders([
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            query: {
-              modules: true,
-              localIndentName: '[name]__[local]__[hash:base64]',
-            },
-          },
-        ]),
+        loader: 'style-loader',
       },
+      {
+        test: /\.css$/,
+        loader: 'css-loader',
+        options: {
+          modules: true,
+        },
+      },
+      // {
+      //   test: /\.css$/,
+      //   loader: 'typings-for-css-modules-loader',
+      //   options: {
+      //     modules: true,
+      //     exportOnlyLocals: true,
+      //   },
+      // },
     ],
   },
   optimization: {
@@ -49,4 +54,9 @@ module.exports = {
       },
     },
   },
+  plugins: [
+    new TypedCssModulesPlugin({
+      globPattern: 'src/**/*.css',
+    }),
+  ],
 };

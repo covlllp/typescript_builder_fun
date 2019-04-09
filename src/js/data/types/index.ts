@@ -4,8 +4,10 @@ export const enum ActionTypes {
 
 export interface SetAudioDataAction {
   type: ActionTypes.SetAudioData;
-  payload: number[];
+  payload: AudioData;
 }
+
+export type AudioData = number[];
 
 export type Action = SetAudioDataAction;
 
