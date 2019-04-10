@@ -34,6 +34,8 @@ export function drawViz({
 }) {
   switch (vizType) {
     case VizTypes.SymmetricCircles: {
+      drawSymmetricCircles({ data, wave });
+      break;
     }
     case VizTypes.CircleDot: {
       drawCircleDot({ data, wave });
@@ -52,6 +54,38 @@ export function drawViz({
   }
 }
 
+function drawSymmetricCircles({
+  data,
+  wave,
+}: {
+  data: CanvasData;
+  wave: number[];
+}) {
+  centerOrigin(data);
+  const minDimension = Math.min(data.width, data.height) / 2;
+  const halfWay = Math.floor(wave.length / 2);
+  const rotationAngle = (2 * Math.PI) / wave.length;
+
+  function drawViz(direction: number) {
+    wave.forEach((point, index) => {
+      if (index === halfWay) {
+        data.context.rotate(Math.PI);
+      }
+      const length = (point / FREQ_MAX) * minDimension;
+      data.context.strokeStyle = getColor(point, index);
+      data.context.lineWidth = 2;
+      data.context.rotate(rotationAngle * direction);
+      data.context.beginPath();
+      data.context.moveTo(0, 0);
+      data.context.lineTo(0, length);
+      data.context.stroke();
+    });
+  }
+  drawViz(1);
+  data.context.rotate(Math.PI);
+  drawViz(-1);
+}
+
 function drawCircleDot({ data, wave }: { data: CanvasData; wave: number[] }) {
   centerOrigin(data);
   const minDimension = Math.min(data.width, data.height) / 2;
@@ -68,13 +102,13 @@ function drawCircleDot({ data, wave }: { data: CanvasData; wave: number[] }) {
 function drawCircleWave({ data, wave }: { data: CanvasData; wave: number[] }) {
   centerOrigin(data);
   const minDimension = Math.min(data.width, data.height) / 2;
-  const rotationAngle = (2 * Math.PI) / wave.length;
+  const rotationAngle = (4 * Math.PI) / wave.length;
 
   wave.forEach((point, index) => {
     const length = (point / FREQ_MAX) * minDimension;
     data.context.strokeStyle = getColor(point, index);
     data.context.lineWidth = 2;
-    data.context.rotate(rotationAngle * 2);
+    data.context.rotate(rotationAngle);
     data.context.beginPath();
     data.context.moveTo(0, 0);
     data.context.lineTo(0, length);

@@ -11,8 +11,8 @@ function RGBAToString(rgba: RGBA) {
 
 export function getColor(point: number, index: number) {
   return RGBAToString({
-    red: point * 0.75,
-    green: Math.random() * 20,
-    blue: Math.random() * index * 0.5,
+    red: point,
+    green: 100,
+    blue: index * 0.25,
   });
 }
