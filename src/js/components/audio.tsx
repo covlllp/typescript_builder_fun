@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 interface AudioProps {
+  className?: string;
   src: string;
   onDataChange?(data: number[]): void;
 }
@@ -44,6 +45,13 @@ export class Audio extends React.Component<AudioProps, {}> {
   };
 
   render() {
-    return <audio src={this.props.src} ref={this.audioElement} controls />;
+    return (
+      <audio
+        className={this.props.className}
+        src={this.props.src}
+        ref={this.audioElement}
+        controls
+      />
+    );
   }
 }

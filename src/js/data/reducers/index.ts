@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import { ActionTypes, Action, StoreShape } from 'js/data/types';
 
 const initialState: StoreShape = {
@@ -7,9 +9,11 @@ const initialState: StoreShape = {
 export function reducer(state = initialState, action: Action): StoreShape {
   switch (action.type) {
     case ActionTypes.SetAudioData: {
-      return {
-        audioData: action.payload,
-      };
+      if (!isEqual(action.payload, state.audioData)) {
+        return {
+          audioData: action.payload,
+        };
+      }
     }
     default:
       return state;

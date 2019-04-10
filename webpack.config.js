@@ -31,16 +31,9 @@ module.exports = {
         loader: 'css-loader',
         options: {
           modules: true,
+          localIdentName: '[name]__[local]__[hash:base64]',
         },
       },
-      // {
-      //   test: /\.css$/,
-      //   loader: 'typings-for-css-modules-loader',
-      //   options: {
-      //     modules: true,
-      //     exportOnlyLocals: true,
-      //   },
-      // },
     ],
   },
   optimization: {
