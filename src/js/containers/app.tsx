@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 
 import { Audio } from 'js/components/audio';
 import { AudioCanvas } from 'js/components/audio_canvas';
-import { setAudioData } from 'js/data/actions';
-import { getAudioData } from 'js/data/selectors';
-import { StoreShape } from 'js/data/types';
+import { VizSelector } from 'js/components/viz_selector';
+import { AVAIL_VIZ_TYPES } from 'js/constants';
+import { setAudioData, setVizType } from 'js/data/actions';
+import { getAudioData, getVizType } from 'js/data/selectors';
+import { StoreShape, VizTypes } from 'js/data/types';
 
 import * as styles from './app.css';
 
 interface AppProps {
   audioData: number[];
   setAudioData(data: number[]): void;
+  setVizType(vizType: VizTypes): void;
+  vizType: VizTypes;
 }
 
 interface AppState {
@@ -35,17 +39,24 @@ class App extends React.Component<AppProps, AppState> {
   render() {
     return (
       <div className={styles.app}>
-        <Audio
-          className={styles.audio}
-          src="audio/gggggg.mp3"
-          onDataChange={this.setAudioData}
-        />
-        <AudioCanvas
-          className={styles.canvas}
-          data={this.props.audioData}
-          width={this.state.windowWidth}
-          height={this.state.windowHeight}
-        />
+        <div className={styles.audio}>
+          <Audio src="audio/gggggg.mp3" onDataChange={this.setAudioData} />
+        </div>
+        <div className={styles.canvas}>
+          <AudioCanvas
+            data={this.props.audioData}
+            width={this.state.windowWidth}
+            height={this.state.windowHeight}
+            vizType={this.props.vizType}
+          />
+        </div>
+        <div className={styles.vizSelector}>
+          <VizSelector
+            vizTypes={AVAIL_VIZ_TYPES}
+            selectedViz={this.props.vizType}
+            onVizSelection={this.props.setVizType}
+          />
+        </div>
       </div>
     );
   }
@@ -54,8 +65,9 @@ class App extends React.Component<AppProps, AppState> {
 const ConnectedApp = connect(
   (state: StoreShape) => ({
     audioData: getAudioData(state),
+    vizType: getVizType(state),
   }),
-  { setAudioData },
+  { setAudioData, setVizType },
 )(App);
 
 export { ConnectedApp as App };

@@ -1,7 +1,8 @@
 import * as React from 'react';
 
+import * as styles from './canvas.css';
+
 interface CanvasProps {
-  className?: string;
   drawCanvas?(
     canvas: HTMLCanvasElement,
     context: CanvasRenderingContext2D,
@@ -35,6 +36,6 @@ export class Canvas extends React.Component<CanvasProps, {}> {
   }
 
   render() {
-    return <canvas className={this.props.className} ref={this.canvas} />;
+    return <canvas className={styles.canvas} ref={this.canvas} />;
   }
 }

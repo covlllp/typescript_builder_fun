@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 import { Canvas } from 'js/components/canvas';
-
+import { VizTypes } from 'js/data/types';
 import * as Painter from 'js/lib/painter';
 
 interface AudioCanvasProps {
-  className?: string;
   data: number[];
   width: number;
   height: number;
+  vizType: VizTypes;
 }
 
 export class AudioCanvas extends React.Component<AudioCanvasProps, {}> {
@@ -16,7 +16,7 @@ export class AudioCanvas extends React.Component<AudioCanvasProps, {}> {
     canvas: HTMLCanvasElement,
     context: CanvasRenderingContext2D,
   ) => {
-    const { data, width, height } = this.props;
+    const { data, width, height, vizType } = this.props;
     const canvasData = {
       width,
       height,
@@ -26,12 +26,10 @@ export class AudioCanvas extends React.Component<AudioCanvasProps, {}> {
     canvas.width = width;
     canvas.height = height;
     Painter.clearCanvas(canvasData);
-    Painter.drawLineWave(canvasData, data);
+    Painter.drawViz({ data: canvasData, wave: data, vizType });
   };
 
   render() {
-    return (
-      <Canvas className={this.props.className} drawCanvas={this.drawCanvas} />
-    );
+    return <Canvas drawCanvas={this.drawCanvas} />;
   }
 }

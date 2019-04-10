@@ -5,15 +5,8 @@
 }
 
 .audio {
-  z-index: 100;
   width: calc(100% - 40px);
   margin: 20px;
-}
-
-.canvasContainer {
-  position: relative;
-  height: calc(100% - 60px);
-  width: 100%;
 }
 
 .canvas {
@@ -22,4 +15,12 @@
   left: 0;
   height: 100%;
   width: 100%;
+  z-index: -1;
+}
+
+.vizSelector {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 20px;
 }
