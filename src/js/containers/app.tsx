@@ -32,15 +32,29 @@ class App extends React.Component<AppProps, AppState> {
       windowHeight: window.innerHeight,
     };
   }
+  componentDidMount() {
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
 
-  private setAudioData = (data: number[]) => {
-    this.props.setAudioData(data);
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  private updateWindowDimensions = () => {
+    this.setState({
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+    });
   };
+
   render() {
     return (
       <div className={styles.app}>
         <div className={styles.audio}>
-          <Audio src="audio/gggggg.mp3" onDataChange={this.setAudioData} />
+          <Audio
+            src="audio/gggggg.mp3"
+            onDataChange={this.props.setAudioData}
+          />
         </div>
         <div className={styles.canvas}>
           <AudioCanvas
