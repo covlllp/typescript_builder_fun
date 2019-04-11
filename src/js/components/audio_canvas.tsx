@@ -9,6 +9,7 @@ interface AudioCanvasProps {
   width: number;
   height: number;
   vizType: VizTypes;
+  stepSize: number;
 }
 
 export class AudioCanvas extends React.Component<AudioCanvasProps, {}> {
@@ -16,12 +17,13 @@ export class AudioCanvas extends React.Component<AudioCanvasProps, {}> {
     canvas: HTMLCanvasElement,
     context: CanvasRenderingContext2D,
   ) => {
-    const { data, width, height, vizType } = this.props;
+    const { data, width, height, vizType, stepSize } = this.props;
     const canvasData = {
       width,
       height,
       canvas,
       context,
+      stepSize,
     };
     canvas.width = width;
     canvas.height = height;

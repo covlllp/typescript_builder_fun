@@ -7,4 +7,5 @@ export const AVAIL_VIZ_TYPES = [
   VizTypes.CircleWave,
   VizTypes.CircleDot,
   VizTypes.SymmetricCircles,
+  VizTypes.SymmetricDot,
 ];

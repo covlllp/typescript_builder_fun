@@ -7,6 +7,7 @@ interface CanvasData {
   context: CanvasRenderingContext2D;
   width: number;
   height: number;
+  stepSize: number;
 }
 
 export function paintWavelength() {}
@@ -33,6 +34,10 @@ export function drawViz({
   vizType: VizTypes;
 }) {
   switch (vizType) {
+    case VizTypes.SymmetricDot: {
+      drawSymmetricDot({ data, wave });
+      break;
+    }
     case VizTypes.SymmetricCircles: {
       drawSymmetricCircles({ data, wave });
       break;
@@ -54,7 +59,7 @@ export function drawViz({
   }
 }
 
-function drawSymmetricCircles({
+function drawSymmetricDot({
   data,
   wave,
 }: {
@@ -72,8 +77,37 @@ function drawSymmetricCircles({
         data.context.rotate(Math.PI);
       }
       const length = (point / FREQ_MAX) * minDimension;
+      data.context.rotate(rotationAngle * direction);
+      data.context.fillStyle = getColor(point, index);
+      data.context.fillRect(0, length, 5, 5);
+    });
+  }
+  drawViz(1);
+  data.context.rotate(Math.PI);
+  drawViz(-1);
+}
+
+function drawSymmetricCircles({
+  data,
+  wave,
+}: {
+  data: CanvasData;
+  wave: number[];
+}) {
+  centerOrigin(data);
+  const minDimension = Math.min(data.width, data.height) / 2;
+  const breaks = data.stepSize;
+  const breakIndex = Math.floor(wave.length / breaks);
+  const rotationAngle = (breaks * Math.PI) / wave.length;
+
+  function drawViz(direction: number) {
+    wave.forEach((point, index) => {
+      if (index !== 0 && !(index % breakIndex)) {
+        data.context.rotate(Math.PI);
+      }
+      const length = (point / FREQ_MAX) * minDimension;
       data.context.strokeStyle = getColor(point, index);
-      data.context.lineWidth = 2;
+      data.context.lineWidth = 3;
       data.context.rotate(rotationAngle * direction);
       data.context.beginPath();
       data.context.moveTo(0, 0);
@@ -82,7 +116,9 @@ function drawSymmetricCircles({
     });
   }
   drawViz(1);
-  data.context.rotate(Math.PI);
+  if (breaks == 1 || !(breaks % 2)) {
+    data.context.rotate(Math.PI);
+  }
   drawViz(-1);
 }
 
@@ -95,7 +131,7 @@ function drawCircleDot({ data, wave }: { data: CanvasData; wave: number[] }) {
     const length = (point / FREQ_MAX) * minDimension;
     data.context.rotate(rotationAngle * 2);
     data.context.fillStyle = getColor(point, index);
-    data.context.fillRect(0, length, 5, 5);
+    data.context.fillRect(0, length, data.stepSize, data.stepSize);
   });
 }
 
@@ -107,7 +143,7 @@ function drawCircleWave({ data, wave }: { data: CanvasData; wave: number[] }) {
   wave.forEach((point, index) => {
     const length = (point / FREQ_MAX) * minDimension;
     data.context.strokeStyle = getColor(point, index);
-    data.context.lineWidth = 2;
+    data.context.lineWidth = data.stepSize;
     data.context.rotate(rotationAngle);
     data.context.beginPath();
     data.context.moveTo(0, 0);
@@ -122,11 +158,10 @@ function drawLineWave({ data, wave }: { data: CanvasData; wave: number[] }) {
 
   let prevX = 0;
   let prevY = halfWay;
-  const jump = 3;
 
   data.context.moveTo(0, halfWay);
   wave.forEach((point, index) => {
-    if (index % jump) return;
+    if (index % data.stepSize) return;
     const y = (point / FREQ_MAX) * halfWay * (index % 2 ? 1 : -1) + halfWay;
     const x = step * index;
     data.context.strokeStyle = getColor(point, index);

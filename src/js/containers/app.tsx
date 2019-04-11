@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 
 import { Audio } from 'js/components/audio';
 import { AudioCanvas } from 'js/components/audio_canvas';
+import { Slider } from 'js/components/slider';
 import { VizSelector } from 'js/components/viz_selector';
 import { AVAIL_VIZ_TYPES } from 'js/constants';
-import { setAudioData, setVizType } from 'js/data/actions';
-import { getAudioData, getVizType } from 'js/data/selectors';
+import { setAudioData, setVizType, setStepSize } from 'js/data/actions';
+import { getAudioData, getVizType, getStepSize } from 'js/data/selectors';
 import { StoreShape, VizTypes } from 'js/data/types';
 
 import * as styles from './app.css';
@@ -15,7 +16,9 @@ interface AppProps {
   audioData: number[];
   setAudioData(data: number[]): void;
   setVizType(vizType: VizTypes): void;
+  setStepSize(size: number): void;
   vizType: VizTypes;
+  stepSize: number;
 }
 
 interface AppState {
@@ -62,6 +65,7 @@ class App extends React.Component<AppProps, AppState> {
             width={this.state.windowWidth}
             height={this.state.windowHeight}
             vizType={this.props.vizType}
+            stepSize={this.props.stepSize}
           />
         </div>
         <div className={styles.vizSelector}>
@@ -69,6 +73,14 @@ class App extends React.Component<AppProps, AppState> {
             vizTypes={AVAIL_VIZ_TYPES}
             selectedViz={this.props.vizType}
             onVizSelection={this.props.setVizType}
+          />
+        </div>
+        <div className={styles.slider}>
+          <Slider
+            min={1}
+            max={5}
+            onChange={this.props.setStepSize}
+            value={this.props.stepSize}
           />
         </div>
       </div>
@@ -80,8 +92,9 @@ const ConnectedApp = connect(
   (state: StoreShape) => ({
     audioData: getAudioData(state),
     vizType: getVizType(state),
+    stepSize: getStepSize(state),
   }),
-  { setAudioData, setVizType },
+  { setAudioData, setVizType, setStepSize },
 )(App);
 
 export { ConnectedApp as App };

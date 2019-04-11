@@ -5,6 +5,7 @@ import { ActionTypes, Action, StoreShape, VizTypes } from 'js/data/types';
 const initialState: StoreShape = {
   audioData: [],
   vizType: VizTypes.SymmetricCircles,
+  stepSize: 1,
 };
 
 export function reducer(state = initialState, action: Action): StoreShape {
@@ -13,6 +14,12 @@ export function reducer(state = initialState, action: Action): StoreShape {
       return {
         ...state,
         vizType: action.payload,
+      };
+    }
+    case ActionTypes.SetStepSize: {
+      return {
+        ...state,
+        stepSize: action.payload,
       };
     }
     case ActionTypes.SetAudioData: {

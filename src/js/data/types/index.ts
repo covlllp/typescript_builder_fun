@@ -1,18 +1,7 @@
 export const enum ActionTypes {
   SetAudioData = 'SetAudioData',
   SetVizType = 'SetVizType',
-}
-
-export interface SetAudioDataAction {
-  type: ActionTypes.SetAudioData;
-  payload: AudioData;
-}
-
-export type AudioData = number[];
-
-export interface StoreShape {
-  audioData: number[];
-  vizType: VizTypes;
+  SetStepSize = 'SetStepSize',
 }
 
 export const enum VizTypes {
@@ -20,6 +9,13 @@ export const enum VizTypes {
   CircleWave = 'CircleWave',
   CircleDot = 'CircleDot',
   SymmetricCircles = 'SymmetricCircles',
+  SymmetricDot = 'SymmetricDot',
+}
+
+export interface StoreShape {
+  audioData: number[];
+  vizType: VizTypes;
+  stepSize: number;
 }
 
 export interface SetVizTypeAction {
@@ -27,4 +23,14 @@ export interface SetVizTypeAction {
   payload: VizTypes;
 }
 
-export type Action = SetAudioDataAction | SetVizTypeAction;
+export interface SetAudioDataAction {
+  type: ActionTypes.SetAudioData;
+  payload: number[];
+}
+
+export interface SetStepSizeAction {
+  type: ActionTypes.SetStepSize;
+  payload: number;
+}
+
+export type Action = SetAudioDataAction | SetVizTypeAction | SetStepSizeAction;

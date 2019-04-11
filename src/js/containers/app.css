@@ -24,3 +24,11 @@
   right: 0;
   margin: 20px;
 }
+
+.slider {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 20px;
+
+}
